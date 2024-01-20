@@ -1,0 +1,71 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "prototapi"
+description = "My private repository to experiment with FastAPI and other dev tools."
+authors = [
+    { email = "grebecchi98@gmail.com" },
+]
+maintainers = [
+    { email = "grebecchi98@gmail.com" },
+]
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dynamic = ["version"]
+keywords = [
+]
+classifiers = [
+]
+
+dependencies = [
+    "adlfs==2023.12.0",
+    "boto3==1.34.23",
+    "fastapi[all]==0.109.0",
+    "pydantic-settings==2.1.0",
+    "pydantic==2.5.3",
+]
+
+[project.optional-dependencies]
+dev = [
+    "docker",
+    "faker",
+    "moto",
+    "nox",
+    "pre-commit",
+    "pytest",
+    "pytest-asyncio",
+    "pytest-cov",
+    "ruff",
+]
+docs = [
+    "mkdocs",
+    "mkdocs-material",
+    "mkdocstrings[python]",
+    "pytkdocs[numpy-style]",
+]
+test = [
+    "moto==4.2.13",
+    "pytest-asyncio==0.23.3",
+    "pytest-cov==4.1.0",
+    "pytest==7.4.4",
+]
+
+[project.urls]
+Repository = "https://github.com/giacomorebecchi/prototapi"
+
+[tool.coverage.report]
+exclude_lines = ["if TYPE_CHECKING:", "if __name__ == .__main__.:", "no cov"]
+
+[tool.coverage.run]
+branch = true
+parallel = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools_scm]

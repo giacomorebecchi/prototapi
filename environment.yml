@@ -1,0 +1,31 @@
+name: prototapi
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - pip
+
+  # interactive dev
+  - ipython
+  - ipykernel
+
+  - pip:
+      - -e .[dev,docs]
+
+variables:
+  # default test Azurite credentials that are automatically configured in the container
+  AZURITE_ACCOUNT_KEY: Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==
+  # default test Azurite credentials that are automatically configured in the container
+  AZURITE_ACCOUNT_NAME: devstoreaccount1
+  # default test Azurite credentials that are automatically configured in the container
+  AZURITE_CONNECTION_STRING: "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;"
+  AZURITE_PORT: "10000"
+  DYNAMO_ACCESS_KEY: MyAccessKey
+  DYNAMO_PORT: "8002"
+  DYNAMO_REGION: antarctica
+  DYNAMO_SECRET_KEY: MySecretKey
+  MINIO_ACCESS_KEY: TESTACCESSKEY12345
+  MINIO_PORT: "9000"
+  MINIO_SECRET_KEY: ABCSECRETKEY
+  MINIO_REGION: antarctica
+  MOTO_ALLOW_NONEXISTENT_REGION: "True"

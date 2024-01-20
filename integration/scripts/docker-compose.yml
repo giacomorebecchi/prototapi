@@ -1,0 +1,47 @@
+version: "3.9"
+
+services:
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite:3.29.0
+    command: azurite-blob --blobHost 0.0.0.0
+    healthcheck:
+      test: nc 127.0.0.1 ${AZURITE_PORT} -z
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    ports:
+      - ${AZURITE_PORT}:10000
+
+  dynamodb:
+    image: amazon/dynamodb-local:2.2.1
+    environment:
+      AWS_ACCESS_KEY_ID: ${DYNAMO_ACCESS_KEY}
+      AWS_SECRET_ACCESS_KEY: ${DYNAMO_SECRET_KEY}
+    command:
+      ["-jar", "DynamoDBLocal.jar", "-inMemory", "-sharedDb", "-port", "8002"]
+    ports:
+      - ${DYNAMO_PORT}:8002
+
+  minio:
+    image: minio/minio:latest
+    expose:
+      - "${MINIO_PORT}"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY}
+      MINIO_REGION_NAME: ${MINIO_REGION}
+    command: server /data --console-address ":9001"
+    ports:
+      - ${MINIO_PORT}:9000
+      - 9001:9001
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "curl",
+          "-f",
+          "http://localhost:${MINIO_PORT}/minio/health/live",
+        ]
+      interval: 30s
+      timeout: 20s
+      retries: 3

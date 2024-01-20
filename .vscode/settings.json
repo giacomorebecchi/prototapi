@@ -1,0 +1,7 @@
+{
+    "python.testing.pytestArgs": [
+        // "integration",
+        "tests",
+    ],
+    "python.testing.pytestEnabled": true,
+}

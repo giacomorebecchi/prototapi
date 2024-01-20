@@ -1,0 +1,49 @@
+version: "3.9"
+
+# To correctly build the container, you need:
+# - to configure the `pip.conf` at $HOME/.config/pip/pip.conf
+# - to set a `VERSION` environment variable with the desired version
+
+services:
+  prototapi:
+    build:
+      args:
+        VERSION: $VERSION
+      context: .
+      dockerfile: ./docker/Dockerfile
+      secrets:
+        - pip.conf
+    ports:
+      - 44444:44444
+
+  dynamodb:
+    image: amazon/dynamodb-local:2.2.1
+    environment:
+      AWS_ACCESS_KEY_ID: ${DYNAMO_ACCESS_KEY}
+      AWS_SECRET_ACCESS_KEY: ${DYNAMO_SECRET_KEY}
+    command:
+      ["-jar", "DynamoDBLocal.jar", "-inMemory", "-sharedDb", "-port", "8002"]
+    ports:
+      - ${DYNAMO_PORT}:8002
+
+  dynamodb-admin:
+    image: aaronshaf/dynamodb-admin
+    environment:
+      DYNAMO_ENDPOINT: http://dynamo:8002
+      AWS_REGION: ${DYNAMO_REGION}
+      AWS_ACCESS_KEY_ID: ${DYNAMO_ACCESS_KEY}
+      AWS_SECRET_ACCESS_KEY: ${DYNAMO_SECRET_KEY}
+    depends_on:
+      - dynamodb
+    ports:
+      - 8001:8001
+
+secrets:
+  pip.conf:
+    file: $HOME/.config/pip/pip.conf
+
+# this link the docker network of this file with the docker-compose.yml file
+# in integration/scripts/
+networks:
+  scripts_default:
+    driver: bridge
